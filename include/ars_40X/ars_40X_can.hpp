@@ -5,17 +5,21 @@
 #ifndef ARS_40X_ARS_40X_HPP
 #define ARS_40X_ARS_40X_HPP
 
-#include <socket_can/socket_can.hpp>
+// #include <socket_can/socket_can.hpp>
 
 #include "ars_40X/cluster_list.hpp"
 #include "ars_40X/motion_input_signals.hpp"
 #include "ars_40X/object_list.hpp"
 #include "ars_40X/radar_cfg.hpp"
 #include "ars_40X/radar_state.hpp"
+#include "ICANCmd.h"
 
 #include <cstdint>
 #include <string>
 #include <iostream>
+#include <memory>
+#include <thread>
+#include <bits/shared_ptr.h>
 
 namespace ars_40X {
 typedef enum can_messages {
@@ -92,8 +96,13 @@ class ARS_40X_CAN {
 
   virtual void send_radar_state() {};
 
+  void* receive_func(void *param);
+    
+  void* send_func(void *param, uint8_t* data, uint8_t dlc);
+
+  bool open_can(int argc, char** argv);
+
  private:
-  socket_can::SocketCAN can_;
 
   cluster_list::Cluster_0_Status cluster_0_status_;
 
@@ -116,6 +125,14 @@ class ARS_40X_CAN {
   radar_state::RadarState radar_state_;
 
   radar_cfg::RadarCfg radar_cfg_;
+
+  std::shared_ptr<std::thread> thd_rcv0_;
+
+  std::shared_ptr<std::thread> thd_rcv1_;
+
+  // uint8_t rcv0_buffer[4096];
+
+  DWORD dwDeviceHandle;
 };
 }
 

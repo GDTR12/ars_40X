@@ -6,6 +6,9 @@ if (NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
 endif ()
 
+set(CMAKE_BUILD_TYPE Release)
+add_definitions(-DDEBUG)
+
 # Default to C++14
 if (NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
@@ -30,7 +33,7 @@ endif ()
 find_package(costmap_converter REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
-find_package(socket_can REQUIRED)
+# find_package(socket_can REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(visualization_msgs REQUIRED)
@@ -66,13 +69,13 @@ if ($ENV{ROS_VERSION} EQUAL 1)
       CATKIN_DEPENDS
       message_runtime
       roscpp
-      socket_can
+      # socket_can
   )
   include_directories(${catkin_INCLUDE_DIRS})
 endif ()
 
 include_directories(include)
-include_directories(${socket_can_INCLUDE_DIRS})
+# include_directories(${socket_can_INCLUDE_DIRS})
 
 add_library(ars_40X_msg
     src/cluster_list.cpp
@@ -86,7 +89,8 @@ add_library(ars_40X_can
     src/ars_40X_can.cpp
     )
 
-target_link_libraries(ars_40X_can ars_40X_msg ${socket_can_LIBRARIES})
+# target_link_libraries(ars_40X_can ars_40X_msg ${socket_can_LIBRARIES})
+target_link_libraries(ars_40X_can ars_40X_msg)
 
 add_executable(ars_40X_ros
     src/ros/ars_40X_ros.cpp
@@ -96,6 +100,13 @@ add_executable(ars_40X_ros
     src/ros/radar_cfg_ros.cpp
     src/ros/radar_state_ros.cpp
     )
+
+set(catkin_LIBRARIES 
+   ${catkin_LIBRARIES}
+   CanCmd
+)
+
+link_directories(./lib)
 
 add_dependencies(ars_40X_ros ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
 target_link_libraries(ars_40X_ros ${catkin_LIBRARIES})

@@ -46,9 +46,9 @@ class ObjectListROS {
 
   object_list::Object_3_Extended *object_3_extended_;
 
-  int object_2_quality_id_;
+  int object_2_quality_id_ = 0;
 
-  int object_3_extended_id_;
+  int object_3_extended_id_ = 0;
 };
 }
 
