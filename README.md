@@ -5,10 +5,21 @@
 
 #### Requirements
 
-- [socket_can](https://github.com/Project-MANAS/socket_can)
+- ~~[socket_can](https://github.com/Project-MANAS/socket_can)~~
+- udev (sudo apt install libudev-dev)
 
 #### Launching with arguments
 
+
+### Install LAIKE CANUSB device rules
+```
+cd catkin_ws/src/arx_40X
+cp rules/80-laike-acusb.rules /etc/udev/rules.d/
+```
+
+Then reboot your system, build the program
+
+### Run
 ```bash
 roslaunch ars_40X ars_40X.launch visualize:=true obstacle_array:=true
 ```

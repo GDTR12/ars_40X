@@ -101,12 +101,13 @@ add_executable(ars_40X_ros
     src/ros/radar_state_ros.cpp
     )
 
+find_library(CanCmd_LIB CanCmd HINTS ${PROJECT_SOURCE_DIR}/lib)
+
 set(catkin_LIBRARIES 
    ${catkin_LIBRARIES}
-   CanCmd
+   ${CanCmd_LIB}
 )
 
-link_directories(./lib)
 
 add_dependencies(ars_40X_ros ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
 target_link_libraries(ars_40X_ros ${catkin_LIBRARIES})
